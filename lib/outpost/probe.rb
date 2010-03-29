@@ -5,7 +5,7 @@ require 'outpost/probe/rules_handlers'
 module Outpost
   module Probe
   
-    class OutpostError < Exception; end
+    class OutpostError < StandardError; end
   
     class InvalidStatusError < OutpostError; end
   
