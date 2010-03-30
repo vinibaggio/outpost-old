@@ -22,6 +22,7 @@ describe Probe do
     end
 
     it "should have response time in default handlers" do
+      debugger
       ProbeExample.handlers.should include([ResponseTimeRulesHandler, ResponseCodeRulesHandler])
     end
     it "should have response code in default handlers"

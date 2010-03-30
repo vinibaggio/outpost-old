@@ -1,9 +1,8 @@
-require 'outpost/errors'
+require 'outpost/probe/errors'
 
 module Outpost
   module Probe
    
-    class UnknownHandlerError < OutpostError;
     # Outpost probes report statuses to their masters.
     #
     # When a probe is launched, it will poke the service in question
@@ -15,7 +14,7 @@ module Outpost
     #   report :up,       :response_time => {:less_than => 3000}
     #   report :warning,  :response_time => {:more_than => 3000, :less_than => 5000}
     #   report :down,     :response_time => {:more_than => 5000}
-    #   report :down,     :response_code => :error
+    #   report :down,     :response_code => -1
     # end
     # 
     # Available statuses are:
@@ -48,12 +47,17 @@ module Outpost
           @reports << {:status => status, :rule => rule_key, :rule_params => rule_params}
         end
 
-        def register_rule_handler(rule_handler)
-          if rule.respond_to?(:rule_name) and rule.respond_to?(:handle)
-            @handlers ||= {}
-            @handlers[rule_handler.rule_name] = rule_handler
+        def register_rule_handler(*rule_handlers)
+          debugger
+          rule_handlers.each do |rule_handler|
+            if rule_handler.respond_to?(:rule_name) and rule_handler.respond_to?(:handle)
+              @handlers ||= {}
+              @handlers[rule_handler.rule_name] = rule_handler
+            end
           end
         end
+
+        alias register_rule_handlers register_rule_handler 
       end
       
       module InstanceMethods
@@ -67,10 +71,9 @@ module Outpost
           status
         end
 
-
       end
-    end
 
+    end
 
   end
 end
