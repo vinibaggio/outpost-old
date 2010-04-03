@@ -67,11 +67,12 @@ module Outpost
 
         def measure_status(&block)
           status_list = []
-          self.class.reports.each do |report|
-            handler = self.class.handlers[report[:rule]]
-            status << report[:status] if handler.handle(report[:rule_params], block)
+          @@reports.each do |report|
+            @@handlers[report[:rule]].tap do |handler|
+              status_list << report[:status] if handler.handle(@@report[:rule_params], &block)
+            end
           end
-          status
+          status_list
         end
 
       end

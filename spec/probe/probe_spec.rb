@@ -1,14 +1,16 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
 include Outpost
 include Outpost::Probe::RulesHandler
 
 describe Probe do
 
+  # Probe::Base has the following default rules handlers
+  # ResponseCodeRulesHandler, ResponseTimeRulesHandler
   class ProbeExample < Probe::Base; end
 
 
-  describe "rules handlers" do
+  describe "when registering a new rules handler" do
 
     class DummyHandler
       def self.handle
@@ -21,14 +23,24 @@ describe Probe do
       end
     end
 
-    it "should have response time in default handlers" do
-      expected = {:response_time => ResponseTimeRulesHandler, :response_code => ResponseCodeRulesHandler}
-      ProbeExample.handlers.should == expected
-    end
-    it "should have response code in default handlers"
-    it "should ignore classes that doesn't respond to rules_name and handle"
+    it "should ignore classes that doesn't respond to rules_name"
+    it "should ignore classes that doesn't respond to handle"
     it "should accept classes that respond to rules_name and handle"
   end
+
+  describe "when registering default rules handlers" do
+    subject {ProbeExample.handlers}
+
+    it "should have response time in default handlers" do
+      subject.should include({:response_time => ResponseTimeRulesHandler})
+    end
+
+    it "should have response code in default handlers" do
+      subject.should include({:response_code => ResponseCodeRulesHandler})
+    end
+
+  end
+
 
 
   describe "reporting status" do
