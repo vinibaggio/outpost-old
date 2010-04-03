@@ -22,8 +22,8 @@ describe Probe do
     end
 
     it "should have response time in default handlers" do
-      debugger
-      ProbeExample.handlers.should include([ResponseTimeRulesHandler, ResponseCodeRulesHandler])
+      expected = {:response_time => ResponseTimeRulesHandler, :response_code => ResponseCodeRulesHandler}
+      ProbeExample.handlers.should == expected
     end
     it "should have response code in default handlers"
     it "should ignore classes that doesn't respond to rules_name and handle"

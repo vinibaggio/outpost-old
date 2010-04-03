@@ -36,25 +36,28 @@ module Outpost
       end
       
       module ClassMethods
-        attr_accessor :reports, :handlers
 
         # Add a report a status to the rules handler 
         def report(status, rule)
           rule_key = rule.keys.first
           rule_params = rule[rule_key]
 
-          @reports ||= []
-          @reports << {:status => status, :rule => rule_key, :rule_params => rule_params}
+          @@reports ||= []
+          @@reports << {:status => status, :rule => rule_key, :rule_params => rule_params}
         end
 
+        # Register a rule handler in the probe
         def register_rule_handler(*rule_handlers)
-          debugger
           rule_handlers.each do |rule_handler|
             if rule_handler.respond_to?(:rule_name) and rule_handler.respond_to?(:handle)
-              @handlers ||= {}
-              @handlers[rule_handler.rule_name] = rule_handler
+              @@handlers ||= {}
+              @@handlers[rule_handler.rule_name] = rule_handler
             end
           end
+        end
+
+        def handlers
+          @@handlers.dup
         end
 
         alias register_rule_handlers register_rule_handler 
