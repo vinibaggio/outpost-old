@@ -1,8 +1,10 @@
 require "spec_helper"
 
-describe ResponseTimeRulesHandler do
+include Outpost::Probe::RuleHandlers
 
-  subject { ResponseTimeRulesHandler }
+describe ResponseTimeHandler do
+
+  subject { ResponseTimeHandler }
 
   describe "when expecting more than a value" do
     it "should report when time is over" do

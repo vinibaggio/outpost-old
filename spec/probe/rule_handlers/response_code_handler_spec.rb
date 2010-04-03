@@ -1,8 +1,10 @@
-require File.expand_path(File.dirname(__FILE__) + '/../spec_helper')
+require 'spec_helper'
 
-describe ResponseCodeRulesHandler do
+include Outpost::Probe::RuleHandlers
 
-  subject {ResponseCodeRulesHandler}
+describe ResponseCodeHandler do
+
+  subject {ResponseCodeHandler}
 
   it "should report when response code is equal to requested" do
     subject.handle(200) {200}.should be_true
@@ -16,7 +18,7 @@ describe ResponseCodeRulesHandler do
     subject.handle("200") {200}.should be_true
     subject.handle(200) {"200"}.should be_true
   end
-  
+
   it "should return :response_code as rule name" do
     subject.rule_name.should == :response_code
   end

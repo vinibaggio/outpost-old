@@ -2,42 +2,24 @@ require 'outpost/probe/errors'
 
 module Outpost
   module Probe
-   
-    # Outpost probes report statuses to their masters.
-    #
-    # When a probe is launched, it will poke the service in question
-    # and will report a status to its master, defined by the +report+
-    # rules.
-    # 
-    # Examples:
-    # class DatabaseProbe < Outpost::Probe::Base
-    #   report :up,       :response_time => {:less_than => 3000}
-    #   report :warning,  :response_time => {:more_than => 3000, :less_than => 5000}
-    #   report :down,     :response_time => {:more_than => 5000}
-    #   report :down,     :response_code => -1
-    # end
-    # 
-    # Available statuses are:
-    # <tt>:up</tt> - Service up.
-    # <tt>:warning</tt> - Service is up but something is not completely right.
-    # <tt>:down</tt> - Service is down.
-    #
-    # Probes report statuses using a set of rules. Those rules are mainly the following:
-    # <tt>:response_time</tt> - Measure a dummy request to a service
-    # <tt>:response_code</tt> - Get the response code of a dummy request to a service
-    #
-    # See rules handlers for more information.
-    #
+
+    # Probe rule was called, but there are no handlers
+    # that support the specified rule.
+    class UnknownHandlerError < OutpostError; end
+
+    # Probe was asked to add a handler, but it doesn't
+    # respond to the necessary methods.
+    class InvalidHandlerError < OutpostError; end
+
     module StatusHandler
-      
       def self.included(base)
         base.extend ClassMethods
         base.send :include, InstanceMethods
       end
-      
+
       module ClassMethods
 
-        # Add a report a status to the rules handler 
+        # Add a report a status to the rules handler
         def report(status, rule)
           rule_key = rule.keys.first
           rule_params = rule[rule_key]
@@ -52,6 +34,8 @@ module Outpost
             if rule_handler.respond_to?(:rule_name) and rule_handler.respond_to?(:handle)
               @@handlers ||= {}
               @@handlers[rule_handler.rule_name] = rule_handler
+            else
+              raise InvalidHandlerError, "Invalid handler: #{rule_handler}"
             end
           end
         end
@@ -60,9 +44,9 @@ module Outpost
           @@handlers.dup
         end
 
-        alias register_rule_handlers register_rule_handler 
+        alias register_rule_handlers register_rule_handler
       end
-      
+
       module InstanceMethods
 
         def measure_status(&block)

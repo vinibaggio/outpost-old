@@ -1,8 +1,8 @@
 module Outpost
   module Probe
-    module RulesHandler
+    module RuleHandlers
 
-      # The +ResponseTimeRulesHandler+ is capable of handling
+      # The +ResponseTimeRuleHandler+ is capable of handling
       # statuses with :response_time rules.
       #
       # It will report based on a set of rules passed to it. The
@@ -19,9 +19,9 @@ module Outpost
       # report :warning, :responde_time => {:more_than => 1000, :less_than => 5000}
       # report :down,    :response_time => {:more_than => 5000}
       #
-      class ResponseTimeRulesHandler
+      class ResponseTimeHandler
 
-        OPERATIONS = {:less_than => '<', 
+        OPERATIONS = {:less_than => '<',
                       :more_than => '>'}.freeze
 
         def self.handle(params, &block)
@@ -39,7 +39,6 @@ module Outpost
           def self.handle_time_diff(diff, rules)
             rules.each do |rule, val|
               condition = diff.send(OPERATIONS[rule], val)
-              # Shortcut when false
               return false if condition == false
             end
             true
