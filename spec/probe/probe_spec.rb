@@ -6,7 +6,15 @@ describe Probe::Base do
 
   # Probe::Base has the following default rules handlers
   # ResponseCode, ResponseTime
-  class ProbeExample < Probe::Base; end
+  class ProbeExample < Probe::Base;
+    report :up, :response_code => 1
+    report :warning, :response_code => 0
+    report :down, :response_code => -1
+
+    def measure(status)
+      measure_status { status }
+    end
+  end
 
   describe "when registering a new rules handler" do
 
@@ -56,9 +64,23 @@ describe Probe::Base do
   end
 
   describe "reporting status" do
-    it "should report :up when service is available"
-    it "should report :warning when service is up but something's wrong"
-    it "should report :down when service is not available"
+    subject { ProbeExample.new }
+
+    it "should report :up when service is available" do
+      # TODO: subject.measure(1).should be_up
+      subject.measure(1).should == :up
+    end
+
+    it "should report :warning when service is up but something's wrong" do
+      # TODO: subject.measure(0).should be_warning
+      subject.measure(0).should == :warning
+    end
+
+    it "should report :down when service is not available" do
+      # TODO: subject.measure(-1).should be_down
+      subject.measure(-1).should == :down
+    end
+
   end
 
 end

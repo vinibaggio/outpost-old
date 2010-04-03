@@ -18,13 +18,14 @@ module Outpost
       end
 
       module ClassMethods
+        @@reports = []
+        @@handlers = {}
 
         # Add a report a status to the rules handler
         def report(status, rule)
           rule_key = rule.keys.first
           rule_params = rule[rule_key]
 
-          @@reports ||= []
           @@reports << {:status => status, :rule => rule_key, :rule_params => rule_params}
         end
 
@@ -32,7 +33,6 @@ module Outpost
         def register_rule_handler(*rule_handlers)
           rule_handlers.each do |rule_handler|
             if valid_handler?(rule_handler)
-              @@handlers ||= {}
               @@handlers[rule_handler.rule_name] = rule_handler
             else
               raise InvalidHandlerError, "Invalid handler: #{rule_handler}"
@@ -41,7 +41,11 @@ module Outpost
         end
 
         def handlers
-          @@handlers.dup
+          @@handlers
+        end
+
+        def reports
+          @@reports
         end
 
         alias register_rule_handlers register_rule_handler
@@ -54,14 +58,15 @@ module Outpost
 
       module InstanceMethods
 
+        # Return a Report object instead of pure symbols
         def measure_status(&block)
-          status_list = []
-          @@reports.each do |report|
-            @@handlers[report[:rule]].tap do |handler|
-              status_list << report[:status] if handler.handle(@@report[:rule_params], &block)
+          status_to_report = nil
+          self.class.reports.each do |report|
+            self.class.handlers[report[:rule]].tap do |handler|
+              status_to_report = report[:status] if handler.handle(report[:rule_params], &block)
             end
           end
-          status_list
+          status_to_report
         end
 
       end
