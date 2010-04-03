@@ -1,4 +1,4 @@
-require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
+require "spec_helper"
 
 describe ResponseTimeRulesHandler do
 
@@ -21,7 +21,7 @@ describe ResponseTimeRulesHandler do
     end
 
     it "should not report when time is over" do
-      subject.handle({:less_than => 300}) {sleep 0.4}.should be_false
+      subject.handle({:less_than => 100}) {sleep 0.2}.should be_false
     end
   end
 
