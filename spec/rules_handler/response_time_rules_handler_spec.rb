@@ -2,11 +2,11 @@ require File.expand_path(File.dirname(__FILE__) + "/../spec_helper")
 
 describe ResponseTimeRulesHandler do
 
-  subject { ResponseTimeRulesHandler } 
+  subject { ResponseTimeRulesHandler }
 
   describe "when expecting more than a value" do
     it "should report when time is over" do
-      subject.handle({:more_than => 500}) {sleep 1}.should be_true
+      subject.handle({:more_than => 300}) {sleep 0.4}.should be_true
     end
 
     it "should not report when time is under" do
@@ -21,18 +21,18 @@ describe ResponseTimeRulesHandler do
     end
 
     it "should not report when time is over" do
-      subject.handle({:less_than => 1000}) {sleep 2}.should be_false
+      subject.handle({:less_than => 300}) {sleep 0.4}.should be_false
     end
   end
 
   describe "when combining rules and estabilishes an interval" do
     it "should report when time is in between" do
-      subject.handle({:more_than => 500, :less_than => 1500}) {sleep 1}.should be_true
-      subject.handle({:less_than => 1500, :more_than => 500}) {sleep 1}.should be_true
+      subject.handle({:more_than => 100, :less_than => 300}) {sleep 0.2}.should be_true
+      subject.handle({:less_than => 300, :more_than => 100}) {sleep 0.2}.should be_true
     end
-    
-    it "should not report when time is out of the interval" do 
-      subject.handle({:more_than => 500, :less_than => 1000}) {sleep 1}.should be_false
+
+    it "should not report when time is out of the interval" do
+      subject.handle({:more_than => 100, :less_than => 200}) {sleep 0.3}.should be_false
       subject.handle({:more_than => 1000, :less_than => 2000}) {}.should be_false
     end
   end
@@ -43,7 +43,7 @@ describe ResponseTimeRulesHandler do
     end
 
     it "should not report when time satisfy one rule but not all" do
-      subject.handle({:more_than => 1000, :less_than => -1000}) {sleep 2}.should be_false
+      subject.handle({:more_than => 100, :less_than => -1000}) {sleep 0.2}.should be_false
     end
   end
 
