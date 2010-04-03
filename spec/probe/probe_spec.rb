@@ -9,7 +9,6 @@ describe Probe do
   # ResponseCodeRulesHandler, ResponseTimeRulesHandler
   class ProbeExample < Probe::Base; end
 
-
   describe "when registering a new rules handler" do
 
     class DummyHandler
@@ -38,16 +37,12 @@ describe Probe do
     it "should have response code in default handlers" do
       subject.should include({:response_code => ResponseCodeRulesHandler})
     end
-
   end
-
-
 
   describe "reporting status" do
     it "should report :up when service is available"
     it "should report :warning when service is up but something's wrong"
-    it "should report :down when service is not available" 
+    it "should report :down when service is not available"
   end
-
 
 end
