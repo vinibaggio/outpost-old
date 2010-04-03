@@ -11,28 +11,36 @@ describe Probe::Base do
   describe "when registering a new rules handler" do
 
     class DummyHandler
-      def self.handle
-        yield
-        true
+      def self.handle(&block)
       end
 
-      def self.rules_name
+      def self.rule_name
         :dummy
       end
     end
 
     it "should ignore classes that doesn't respond to rules_name" do
-      (IncompleteDummyHandler = DummyHandler.dup).tap do |klass|
-        remove_class_method(klass, :rules_name)
-      end
+      class NoRulesNameDummyHandler; def self.handle(&block); end; end;
 
       lambda {
-        ProbeExample.register_rule_handler IncompleteDummyHandler
+        ProbeExample.register_rule_handler NoRulesNameDummyHandler
       }.should raise_error(InvalidHandlerError)
-
     end
-    it "should ignore classes that doesn't respond to handle"
-    it "should accept classes that respond to rules_name and handle"
+
+    it "should ignore classes that doesn't respond to handle" do
+      class NoHandleDummyHandler; def self.rules_name; end; end;
+
+      lambda {
+        ProbeExample.register_rule_handler NoHandleDummyHandler
+      }.should raise_error(InvalidHandlerError)
+    end
+
+    it "should accept classes that respond to rules_name and handle" do
+      lambda {
+        ProbeExample.register_rule_handler DummyHandler
+      }.should_not raise_error(InvalidHandlerError)
+      ProbeExample.handlers.should include({:dummy => DummyHandler})
+    end
   end
 
   describe "when registering default rules handlers" do
@@ -53,11 +61,4 @@ describe Probe::Base do
     it "should report :down when service is not available"
   end
 
-  def remove_class_method(klass, method_name)
-    klass.instance_eval do
-      class << self
-        undef_method #{method_name}
-      end
-    end
-  end
 end

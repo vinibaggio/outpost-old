@@ -31,7 +31,7 @@ module Outpost
         # Register a rule handler in the probe
         def register_rule_handler(*rule_handlers)
           rule_handlers.each do |rule_handler|
-            if rule_handler.respond_to?(:rule_name) and rule_handler.respond_to?(:handle)
+            if valid_handler?(rule_handler)
               @@handlers ||= {}
               @@handlers[rule_handler.rule_name] = rule_handler
             else
@@ -45,6 +45,11 @@ module Outpost
         end
 
         alias register_rule_handlers register_rule_handler
+
+        protected
+          def valid_handler?(handler)
+            handler.respond_to?(:rule_name) and handler.respond_to?(:handle) and handler.rule_name.is_a? Symbol
+          end
       end
 
       module InstanceMethods
