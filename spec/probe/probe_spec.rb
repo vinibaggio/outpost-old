@@ -63,22 +63,19 @@ describe Probe::Base do
     end
   end
 
-  describe "reporting status" do
+  describe "when reporting status" do
     subject { ProbeExample.new }
 
     it "should report :up when service is available" do
-      # TODO: subject.measure(1).should be_up
-      subject.measure(1).should == :up
+      subject.measure(1).should be_up
     end
 
     it "should report :warning when service is up but something's wrong" do
-      # TODO: subject.measure(0).should be_warning
-      subject.measure(0).should == :warning
+      subject.measure(0).should be_warning
     end
 
     it "should report :down when service is not available" do
-      # TODO: subject.measure(-1).should be_down
-      subject.measure(-1).should == :down
+      subject.measure(-1).should be_down
     end
 
   end

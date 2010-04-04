@@ -1,4 +1,5 @@
 require 'outpost/probe/errors'
+require 'outpost/probe/report'
 
 module Outpost
   module Probe
@@ -60,15 +61,14 @@ module Outpost
 
       module InstanceMethods
 
-        # TODO: Return a Report object instead of pure symbols
         def measure_status(&block)
-          status_to_report = nil
+          measurement_report = Outpost::Probe::Report.new
           self.class.reports.each do |report|
             self.class.handlers[report[:rule]].tap do |handler|
-              status_to_report = report[:status] if handler.handle(report[:rule_params], &block)
+              measurement_report.add(report, handler, &block)
             end
           end
-          status_to_report
+          measurement_report
         end
 
       end
