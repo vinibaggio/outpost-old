@@ -20,12 +20,12 @@ module Outpost
       #
       class ResponseCodeHandler
 
-        def self.handle(param, &block)
+        def handle(param, &block)
           response = block.call
           response.to_s == param.to_s
         end
 
-        def self.rule_name
+        def rule_name
           :response_code
         end
 

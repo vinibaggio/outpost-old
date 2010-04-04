@@ -4,7 +4,7 @@ include Outpost::Probe::RuleHandlers
 
 describe ResponseCodeHandler do
 
-  subject {ResponseCodeHandler}
+  subject {ResponseCodeHandler.new}
 
   it "should report when response code is equal to requested" do
     subject.handle(200) {200}.should be_true

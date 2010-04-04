@@ -31,7 +31,9 @@ module Outpost
 
         # Register a rule handler in the probe
         def register_rule_handler(*rule_handlers)
-          rule_handlers.each do |rule_handler|
+          rule_handlers.each do |rule_handler_class|
+            rule_handler = rule_handler_class.new
+
             if valid_handler?(rule_handler)
               @@handlers[rule_handler.rule_name] = rule_handler
             else
@@ -58,7 +60,7 @@ module Outpost
 
       module InstanceMethods
 
-        # Return a Report object instead of pure symbols
+        # TODO: Return a Report object instead of pure symbols
         def measure_status(&block)
           status_to_report = nil
           self.class.reports.each do |report|

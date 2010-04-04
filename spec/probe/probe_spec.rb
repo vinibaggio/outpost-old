@@ -19,16 +19,16 @@ describe Probe::Base do
   describe "when registering a new rules handler" do
 
     class DummyHandler
-      def self.handle(&block)
+      def handle(&block)
       end
 
-      def self.rule_name
+      def rule_name
         :dummy
       end
     end
 
     it "should ignore classes that doesn't respond to rules_name" do
-      class NoRulesNameDummyHandler; def self.handle(&block); end; end;
+      class NoRulesNameDummyHandler; def handle(&block); end; end;
 
       lambda {
         ProbeExample.register_rule_handler NoRulesNameDummyHandler
@@ -36,7 +36,7 @@ describe Probe::Base do
     end
 
     it "should ignore classes that doesn't respond to handle" do
-      class NoHandleDummyHandler; def self.rules_name; end; end;
+      class NoHandleDummyHandler; def rules_name; end; end;
 
       lambda {
         ProbeExample.register_rule_handler NoHandleDummyHandler
@@ -47,7 +47,7 @@ describe Probe::Base do
       lambda {
         ProbeExample.register_rule_handler DummyHandler
       }.should_not raise_error(InvalidHandlerError)
-      ProbeExample.handlers.should include({:dummy => DummyHandler})
+      ProbeExample.handlers[:dummy].should be_instance_of(DummyHandler)
     end
   end
 
@@ -55,11 +55,11 @@ describe Probe::Base do
     subject {ProbeExample.handlers}
 
     it "should have response time in default handlers" do
-      subject.should include({:response_time => RuleHandlers::ResponseTimeHandler})
+      subject[:response_time].should be_instance_of(RuleHandlers::ResponseTimeHandler)
     end
 
     it "should have response code in default handlers" do
-      subject.should include({:response_code => RuleHandlers::ResponseCodeHandler})
+      subject[:response_code].should be_instance_of(RuleHandlers::ResponseCodeHandler)
     end
   end
 

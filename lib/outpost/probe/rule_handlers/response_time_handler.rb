@@ -24,19 +24,19 @@ module Outpost
         OPERATIONS = {:less_than => '<',
                       :more_than => '>'}.freeze
 
-        def self.handle(params, &block)
+        def handle(params, &block)
           before_timer = Time.now
           block.call
           total_time_in_ms = (Time.now - before_timer) * 1000
           handle_time_diff(total_time_in_ms, params)
         end
 
-        def self.rule_name
+        def rule_name
           :response_time
         end
 
         private
-          def self.handle_time_diff(diff, rules)
+          def handle_time_diff(diff, rules)
             rules.each do |rule, val|
               condition = diff.send(OPERATIONS[rule], val)
               return false if condition == false

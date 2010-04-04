@@ -4,7 +4,7 @@ include Outpost::Probe::RuleHandlers
 
 describe ResponseTimeHandler do
 
-  subject { ResponseTimeHandler }
+  subject { ResponseTimeHandler.new }
 
   describe "when expecting more than a value" do
     it "should report when time is over" do
