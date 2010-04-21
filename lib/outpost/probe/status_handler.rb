@@ -6,11 +6,11 @@ module Outpost
 
     # Probe rule was called, but there are no handlers
     # that support the specified rule.
-    class UnknownHandlerError < OutpostError; end
+    UnknownHandlerError = Class.new(OutpostError)
 
     # Probe was asked to add a handler, but it doesn't
     # respond to the necessary methods.
-    class InvalidHandlerError < OutpostError; end
+    InvalidHandlerError = Class.new(OutpostError)
 
     module StatusHandler
       def self.included(base)

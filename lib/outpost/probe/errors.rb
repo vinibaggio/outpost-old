@@ -2,8 +2,7 @@ module Outpost
   module Probe
 
     # General Outpost Error
-    class OutpostError < StandardError; end
-
-    class InvalidStatusError < OutpostError; end
+    OutpostError        = Class.new(StandardError)
+    InvalidStatusError  = Class.new(OutpostError)
   end
 end
