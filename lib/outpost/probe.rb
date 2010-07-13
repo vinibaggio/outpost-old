@@ -1,8 +1,9 @@
+require 'outpost/probe/status_handler'
+require 'outpost/probe/rule_handlers'
+
 
 module Outpost
   module Probe
-    autoload :StatusHandler, 'outpost/probe/status_handler'
-    autoload :RuleHandlers, 'outpost/probe/rule_handlers'
 
     # Outpost probes report statuses to their masters.
     #
