@@ -7,18 +7,19 @@ module Scout
         super
       end
 
-      def after_measurement(response)
+      def after_measurement
         puts "ResponseTime#after_measurement"
         @execution_time = Time.now - @start_time
-        super(response)
+        super
       end
 
-      def build_report(response, rules={})
+      def build_report(all_rules)
         puts "ResponseTime#build_report"
 
-        rules = rules.delete(:response_time)
+        all_rules.each do |scout_hook|
+          p scout_hook
+        end
 
-        super(response, rules)
       end
     end
   end
