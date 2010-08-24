@@ -1,27 +1,23 @@
 require 'outpost/scout/hooks/response_time'
 require 'outpost/scout/hooks/response_code'
+require 'outpost/scout/consolidation'
 
-module Scout
+class Scout::Base
+  include Scout::Consolidation
 
-  class Base
-    def before_measurement
-      puts "Base before measurement"
-    end
+  def before_measurement
+  end
 
-    def measure!
-      before_measurement
-      response = execute
-      after_measurement(response)
+  def measure!
+    before_measurement
+    @response = execute
+    after_measurement
+  end
 
-      build_report(response, {})
-    end
+  def after_measurement
+  end
 
-    def after_measurement(response)
-      puts "response: #{response}"
-    end
-
-    def build_report(response, rules)
-      puts "response: #{response}, rules: #{rules}"
-    end
+  def build_report(rules)
+    raise NotImplementedError
   end
 end
