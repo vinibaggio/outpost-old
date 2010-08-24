@@ -1,35 +1,38 @@
-# --
-# Copyright (c) 2010 Vinicius Baggio Fuentes
-#
-# Permission is hereby granted, free of charge, to any person obtaining
-# a copy of this software and associated documentation files (the
-# "Software"), to deal in the Software without restriction, including
-# without limitation the rights to use, copy, modify, merge, publish,
-# distribute, sublicense, and/or sell copies of the Software, and to
-# permit persons to whom the Software is furnished to do so, subject to
-# the following conditions:
-#
-# The above copyright notice and this permission notice shall be
-# included in all copies or substantial portions of the Software.
-#
-# THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND,
-# EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF
-# MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND
-# NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
-# LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
-# OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
-# WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.
-#++
+require 'outpost/scout'
 
-module Outpost
-  autoload :Probe, 'outpost/probe'
+class Outpost
+  @@scouts = []
+  @@reports = {}
 
-  module Probe
-    autoload :Base, 'outpost/probe/base'
-    autoload :StatusHandler, 'outpost/probe/status_handler'
-    autoload :InvalidHandlerError, 'outpost/probe/status_handler'
+  class << self
+    def depends(dependencies, &block)
+      dependencies.each do |scout, name|
+        @@current_scout = scout
+      end
+      class_eval(&block)
+      @@scouts << @@current_scout.new(@@options)
+    end
 
-    autoload :RuleHandlers, 'outpost/probe/rule_handlers'
+    def report(status, rules)
+      @@reports[@@current_scout] ||= {}
+      @@reports[@@current_scout][rules.keys.first] = rules.values.map { |val| {val => status} }
+    end
 
+    def options(options={})
+      @@options = options
+    end
+
+    def check!
+      @@scouts.each { |scout| scout.measure! }
+      report_status
+    end
+
+    private
+
+    def report_status
+      statuses = @@scouts.map do |scout|
+        scout.build_report(@@reports[scout.class])
+      end
+    end
   end
 end

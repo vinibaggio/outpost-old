@@ -1,16 +1,10 @@
 require 'rubygems'
+require 'bundler'
+
+Bundler.setup :test
+
 require 'spec'
 
-begin
-  require 'ruby-debug'
-rescue LoadError
-  # We are not loud if ruby-debug fails because of ruby 1.9
-end
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib/')
 
-require File.expand_path(File.dirname(__FILE__) + '/../lib/outpost')
-
-# Load everything...
-include Outpost
-
-Spec::Runner.configure do |config|
-end
+require 'outpost'
