@@ -1,12 +1,6 @@
 require 'rubygems'
 require 'spec'
 
-begin
-  require 'ruby-debug'
-rescue LoadError
-end
+$LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../lib/')
 
-require File.expand_path(File.dirname(__FILE__) + '/../lib/outpost')
-
-# Load everything...
-include Outpost
+require 'outpost'
