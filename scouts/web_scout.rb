@@ -1,8 +1,3 @@
-$LOAD_PATH.unshift File.expand_path('./lib')
-
-require 'rubygems'
-require 'outpost'
-
 require 'net/http'
 
 class WebScout < Scout::Base
@@ -22,16 +17,4 @@ class WebScout < Scout::Base
   rescue StandardError
     nil
   end
-
-  protected
-  def connected(&block)
-    conn = Mysql.connect(@host, @username, @password, @db, @port)
-    yield conn
-    conn.close
-  end
-
 end
-
-
-# scout = WebScout.new
-# scout.measure!
