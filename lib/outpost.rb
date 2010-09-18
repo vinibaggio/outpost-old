@@ -1,6 +1,8 @@
 require 'outpost/scout'
 
 class Outpost
+  include Scout::Consolidation
+
   @@scouts = []
   @@reports = {}
 
@@ -27,7 +29,7 @@ class Outpost
 
     def check!
       @@scouts.each { |scout| scout.measure! }
-      report_status
+      consolidate(report_status)
     end
 
     private

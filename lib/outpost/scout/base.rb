@@ -26,7 +26,7 @@ module Scout
     def build_report(rules)
       all_reports = @hooks.map do |hook|
         hook.build_report(@response, rules)
-      end.compact.flatten
+      end.flatten.compact
 
       consolidate(all_reports)
     end

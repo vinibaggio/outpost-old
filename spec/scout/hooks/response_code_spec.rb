@@ -30,7 +30,7 @@ describe Scout::Hooks::ResponseCode do
 
     context "doesn't have hook key" do
       let(:rule_list) { { :response_time => {10 => :down} } }
-      it { should == [ :unknown ] }
+      it { should be_nil }
     end
   end
 
