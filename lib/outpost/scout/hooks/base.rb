@@ -14,6 +14,7 @@ module Scout::Hooks
         status_list += rules.map do |rule, status|
           yield rule, status
         end
+
         status_list
       end
     end

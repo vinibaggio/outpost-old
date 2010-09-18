@@ -5,7 +5,11 @@ module Scout::Hooks
 
     def build_report(response, all_rules={})
       each_rule(all_rules, :response_code) do |rule, status|
-        status if rule == response
+        if rule.is_a? Numeric or rule.is_a? String
+          status if rule.to_i == response.to_i
+        else
+          :unknown
+        end
       end
     end
 

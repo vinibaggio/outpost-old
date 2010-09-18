@@ -34,12 +34,12 @@ describe Scout::Consolidation do
 
     context "nil and :up" do
       let(:status_list) { [nil, :up] }
-      it { should == :unknown }
+      it { should == :up }
     end
 
     context "nil and :warning" do
       let(:status_list) { [nil, :warning] }
-      it { should == :unknown }
+      it { should == :warning }
     end
 
     context "nil and :down" do

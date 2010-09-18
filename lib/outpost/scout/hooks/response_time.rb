@@ -14,6 +14,8 @@ module Scout::Hooks
       each_rule(all_rules, :response_time) do |rule, status|
         if rule.respond_to? :keys and rule.respond_to? :values
           status if test_time_intervals(rule.keys.first, rule.values.first)
+        else
+          :unknown
         end
       end
     end

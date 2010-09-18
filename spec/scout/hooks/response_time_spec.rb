@@ -42,12 +42,12 @@ describe Scout::Hooks::ResponseTime do
 
     context "doesn't recognize params" do
       let(:rule_list) { { :response_time => {:foo => :down} } }
-      it { should == [ nil ] }
+      it { should == [ :unknown ] }
     end
 
     context "doesn't have hook key" do
       let(:rule_list) { { :response_code => {10 => :down} } }
-      it { should be_nil }
+      it { should == [ :unknown ] }
     end
   end
 

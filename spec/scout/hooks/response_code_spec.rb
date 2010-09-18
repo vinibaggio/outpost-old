@@ -25,12 +25,12 @@ describe Scout::Hooks::ResponseCode do
 
     context "doesn't recognize params" do
       let(:rule_list) { { :response_code => {{:less_than => 100} => :down} } }
-      it { should == [ nil ] }
+      it { should == [ :unknown ] }
     end
 
     context "doesn't have hook key" do
       let(:rule_list) { { :response_time => {10 => :down} } }
-      it { should be_nil }
+      it { should == [ :unknown ] }
     end
   end
 
