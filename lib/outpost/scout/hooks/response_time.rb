@@ -1,26 +1,33 @@
-module Scout
-  module Hooks
-    module ResponseTime
-      def before_measurement
-        puts "ResponseTime#before_measurement"
-        @start_time = Time.now
-        super
-      end
+require 'outpost/scout/hooks/base'
 
-      def after_measurement
-        puts "ResponseTime#after_measurement"
-        @execution_time = Time.now - @start_time
-        super
-      end
+module Scout::Hooks
+  class ResponseTime < Base
+    def before_measurement
+      @start_time = Time.now
+    end
 
-      def build_report(all_rules)
-        puts "ResponseTime#build_report"
+    def after_measurement(result=nil)
+      @execution_time = Time.now - @start_time
+    end
 
-        all_rules.each do |scout_hook|
-          p scout_hook
+    def build_report(response, all_rules)
+      each_rule(all_rules, :response_time) do |rule, status|
+        if rule.respond_to? :keys and rule.respond_to? :values
+          status if test_time_intervals(rule.keys.first, rule.values.first)
         end
-
       end
     end
+
+    protected
+      def test_time_intervals(rule, time)
+        case rule
+        when :less_than
+          @execution_time < time
+        when :more_than
+          @execution_time > time
+        else
+          false
+        end
+      end
   end
 end

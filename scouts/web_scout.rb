@@ -1,8 +1,10 @@
+require 'outpost/scout/basic_hooks'
+
 require 'net/http'
 
 class WebScout < Scout::Base
-  include Scout::Hooks::ResponseTime
-  include Scout::Hooks::ResponseCode
+  add_hook Scout::Hooks::ResponseTime
+  add_hook Scout::Hooks::ResponseCode
 
   attr_accessor :host, :port
 

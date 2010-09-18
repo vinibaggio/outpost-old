@@ -4,9 +4,9 @@ describe Scout::Consolidation do
   class Example
     include Scout::Consolidation
   end
-  subject { Example.new.consolidate(status_list) }
 
   describe "#consolidate" do
+    subject { Example.new.consolidate(status_list) }
     context ":up" do
       let(:status_list) { [:up] }
       it { should == :up }
@@ -34,12 +34,12 @@ describe Scout::Consolidation do
 
     context "nil and :up" do
       let(:status_list) { [nil, :up] }
-      it { should == :up }
+      it { should == :unknown }
     end
 
     context "nil and :warning" do
       let(:status_list) { [nil, :warning] }
-      it { should == :warning }
+      it { should == :unknown }
     end
 
     context "nil and :down" do
@@ -48,7 +48,7 @@ describe Scout::Consolidation do
     end
 
     context "only nil wrapped in a list" do
-      let(:status_list) { [:nil] * 3 }
+      let(:status_list) { [nil] * 3 }
       it { should == :unknown }
     end
 

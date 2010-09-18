@@ -10,7 +10,7 @@ class WebOutpostExample < Outpost
   depends WebScout => "web page" do
     options :host => 'localhost', :port => 80
     report :up, :response_code => 200
-    report :up, :response_time => 2000
+    report :up, :response_time => {:less_than => 2000}
   end
 end
 

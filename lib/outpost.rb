@@ -15,7 +15,10 @@ class Outpost
 
     def report(status, rules)
       @@reports[@@current_scout] ||= {}
-      @@reports[@@current_scout][rules.keys.first] = rules.values.map { |val| {val => status} }
+      @@reports[@@current_scout][rules.keys.first] = rules.values.inject({}) do |result, val|
+        result[val] = status
+        result
+      end
     end
 
     def options(options={})
