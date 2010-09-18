@@ -4,6 +4,8 @@ module Scout
   class Base
     include Scout::Consolidation
 
+    attr_accessor :message
+
     def self.add_hook(klass)
       @@hooks ||= []
       @@hooks << klass
@@ -24,11 +26,22 @@ module Scout
     end
 
     def build_report(rules)
+      return @force_status if @force_status
+
       all_reports = @hooks.map do |hook|
         hook.build_report(@response, rules)
       end.flatten.compact
 
-      consolidate(all_reports)
+      @status = consolidate(all_reports)
+    end
+
+
+    def to_message
+      "#{self.class.name} is #{@status}: #{@message}"
+    end
+
+    def down!
+      @status = @force_status = :down
     end
 
   end

@@ -3,20 +3,29 @@ $LOAD_PATH.unshift File.expand_path(File.dirname(__FILE__) + '/../scouts')
 
 require 'outpost'
 require 'web_scout'
+require 'mysql_scout'
 
-class WebOutpostExample < Outpost
+class WebAndDatabaseOutpostExample < Outpost
   # name "Web Site #1"
 
-  depends WebScout => "web page" do
+  depends WebScout => "Web Page" do
     options :host => 'localhost', :port => 80
     report :up, :response_code => 200
-    # report :up, :response_time => {:less_than => 2000}
+  end
+
+  depends MysqlScout => "MySQL" do
+    options :host => 'localhost', :port => 3306
+    report :up, :response_code => 0
+    report :down, :response_code => -1
+
+    report :up, :response_time => {:less_than => 2000}
   end
 end
 
 while true do
-  outpost = WebOutpostExample.new
+  outpost = WebAndDatabaseOutpostExample.new
   puts "The system is #{outpost.check!}!"
   puts "Message: #{outpost.messages}"
   sleep 1
 end
+

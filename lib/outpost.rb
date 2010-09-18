@@ -7,17 +7,19 @@ class Outpost
   @@reports = {}
 
   class << self
+    attr_accessor :reports
+
     def depends(dependencies, &block)
       dependencies.each do |scout, name|
         @@current_scout = scout
       end
       class_eval(&block)
-      @@scouts << @@current_scout.new(@@options)
+      @@scouts << [@@current_scout, @@options]
     end
 
     def report(status, rules)
-      @@reports[@@current_scout] ||= {}
-      @@reports[@@current_scout][rules.keys.first] = rules.values.inject({}) do |result, val|
+      @reports ||= {}
+      @reports[rules.keys.first] = rules.values.inject({}) do |result, val|
         result[val] = status
         result
       end
@@ -26,18 +28,27 @@ class Outpost
     def options(options={})
       @@options = options
     end
+  end
 
-    def check!
-      @@scouts.each { |scout| scout.measure! }
-      consolidate(report_status)
-    end
-
-    private
-
-    def report_status
-      statuses = @@scouts.map do |scout|
-        scout.build_report(@@reports[scout.class])
+  def check!
+    @scouts = []
+    @@scouts.each do |(scout_class, options)|
+      @scouts << scout_class.new(options).tap do |scout|
+        scout.measure!
       end
+    end
+    consolidate(report_status)
+  end
+
+  def messages
+    @scouts.map(&:to_message)
+  end
+
+  private
+
+  def report_status
+    statuses = @scouts.map do |scout|
+      scout.build_report(self.class.reports.dup)
     end
   end
 end

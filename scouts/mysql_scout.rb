@@ -1,12 +1,10 @@
-$LOAD_PATH.unshift File.expand_path('./lib')
+require 'outpost/scout/basic_hooks'
 
-require 'rubygems'
-require 'outpost'
 require 'mysql'
 
 class MysqlScout < Scout::Base
-  include Scout::Hooks::ResponseTime
-  include Scout::Hooks::ResponseCode
+  add_hook Scout::Hooks::ResponseTime
+  add_hook Scout::Hooks::ResponseCode
 
   attr_accessor :host, :username, :password, :db, :port
 
@@ -20,9 +18,12 @@ class MysqlScout < Scout::Base
 
   def execute
     connected do |conn|
-      puts conn.client_info
+      @message = conn.client_info
     end
     0
+  rescue StandardError => e
+    down!
+    @message = e.to_s
   end
 
   protected
@@ -33,7 +34,3 @@ class MysqlScout < Scout::Base
   end
 
 end
-
-
-scout = MysqlScout.new
-scout.measure!

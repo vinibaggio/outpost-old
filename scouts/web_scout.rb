@@ -15,8 +15,9 @@ class WebScout < Scout::Base
   end
 
   def execute
-    Net::HTTP.get_response(@host, @path, @port).code.to_i
-  rescue StandardError
-    nil
+    @message = Net::HTTP.get_response(@host, @path, @port).code.to_i
+  rescue StandardError => e
+    down!
+    @message = e.to_s
   end
 end
