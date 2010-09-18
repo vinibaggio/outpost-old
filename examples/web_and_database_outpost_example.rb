@@ -16,8 +16,6 @@ class WebAndDatabaseOutpostExample < Outpost
   depends MysqlScout => "MySQL" do
     options :host => 'localhost', :port => 3306
     report :up, :response_code => 0
-    report :down, :response_code => -1
-
     report :up, :response_time => {:less_than => 2000}
   end
 end
@@ -25,7 +23,11 @@ end
 while true do
   outpost = WebAndDatabaseOutpostExample.new
   puts "The system is #{outpost.check!}!"
-  puts "Message: #{outpost.messages}"
+
+  outpost.messages.each do |message|
+    print "#{message.scout_name} is #{message.status}: #{message.message}.\n"
+  end
+
   sleep 1
 end
 

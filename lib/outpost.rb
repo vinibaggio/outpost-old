@@ -41,7 +41,7 @@ class Outpost
   end
 
   def messages
-    @scouts.map(&:to_message)
+    @scouts.map(&:message)
   end
 
   private

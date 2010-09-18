@@ -1,4 +1,5 @@
 require 'outpost/scout/consolidation'
+require 'outpost/scout/message'
 
 module Scout
   class Base
@@ -36,8 +37,8 @@ module Scout
     end
 
 
-    def to_message
-      "#{self.class.name} is #{@status}: #{@message}"
+    def message
+      Message.new(self.class.name, @status, @message)
     end
 
     def down!
