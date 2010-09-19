@@ -1,17 +1,17 @@
 
-= Outpost
+# Outpost
 
 Outpost is a service monitoring tool written purely on Ruby. It's main focus is
 to return a real-time service status using three structures: Scouts, Hooks and
 Outposts.
 
 
-== Disclaimer
+## Disclaimer
 
 This is a very initial code, so any interface may change in time and may contain
 several bugs.
 
-== Outposts
+## Outposts
 
 Outposts are Ruby classes that contains a DSL to express services dependencies.
 Example:
@@ -30,7 +30,7 @@ code is 200 and the service response time is bellow 100 milliseconds.
 Outpost relies on Scouts to do the determine a specific service's status,
 such as MySQL connection or HTTP servers' response. 
 
-=== Determining service's status
+### Determining service's status
 
 Outpost gather all status reports and consolidate them by returning the highest
 priority status. So if only one scout report a <code>:down</code> status, the
@@ -46,7 +46,7 @@ To learn more about consolidation, check
 <code>lib/outpost/scout/consolidation.rb</code> file, it's pretty
 straightforward.
 
-=== Running Outposts
+### Running Outposts
 
 You can check a service's status by running the method #check!:
 
@@ -63,7 +63,7 @@ You can check more details about a service status by reading its messages:
 You can find more examples in the <code>examples</code> folder.
 
 
-== Scouts
+## Scouts
 
 Scouts are responsible to connect to the main service and return a basic status.
 They receive options through initialization and must implement the
@@ -96,7 +96,7 @@ You may write your own hook classes. To learn how to do that, read the following
 subsection.
 
 
-=== Writing Hooks
+### Writing Hooks
 
 Hooks are a very simple classes that _must_ implement the build\_report method. 
 It should return the service status depending on the rules. The example bellow
@@ -126,5 +126,13 @@ all the rules specified on an Outpost. It is as follows:
     }
 
 So <code>each\_rule</code> is a helper method that will iterate over all rules.
+
+# Contributing
+
+Feel free to contact me personally, opening issues or pull requests. 
+
+# License
+
+Outpost is released under the MIT license.
 
 
