@@ -20,12 +20,12 @@ class WebAndDatabaseOutpostExample < Outpost
   end
 end
 
-while true do
+loop do
   outpost = WebAndDatabaseOutpostExample.new
-  puts "The system is #{outpost.check!}!"
+  puts "\nThe system is #{outpost.check!}!"
 
   outpost.messages.each do |message|
-    print "#{message.scout_name} is #{message.status}: #{message.message}.\n"
+    puts "#{message.scout_name} is #{message.status}: #{message.message}."
   end
 
   sleep 1

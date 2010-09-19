@@ -5,8 +5,6 @@ require 'outpost'
 require 'web_scout'
 
 class WebOutpostExample < Outpost
-  # name "Web Site #1"
-
   depends WebScout => "web page" do
     options :host => 'localhost', :port => 3000
     report :up, :response_code => 200
@@ -14,12 +12,12 @@ class WebOutpostExample < Outpost
   end
 end
 
-while true do
+loop do
   outpost = WebOutpostExample.new
   puts "The system is #{outpost.check!}!"
 
   outpost.messages.each do |message|
-    print "#{message.scout_name} is #{message.status}: #{message.message}.\n"
+    puts "#{message.scout_name} is #{message.status}: #{message.message}."
   end
 
   sleep 1
