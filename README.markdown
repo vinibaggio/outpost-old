@@ -34,7 +34,7 @@ such as MySQL connection or HTTP servers' response.
 
 Outpost gather all status reports and consolidate them by returning the highest
 priority status. So if only one scout report a <code>:down</code> status, the
-overall system status will be :down. The status list and their priority is as
+overall system status will be <code>:down</code>. The status list and their priority is as
 follows (from lowest to highest priority):
 
     :up
@@ -98,7 +98,7 @@ subsection.
 
 ### Writing Hooks
 
-Hooks are a very simple classes that _must_ implement the build\_report method. 
+Hooks are a very simple classes that _must_ implement the <code>build\_report</code> method. 
 It should return the service status depending on the rules. The example bellow
 illustrates a very simple example:
 
@@ -126,6 +126,10 @@ all the rules specified on an Outpost. It is as follows:
     }
 
 So <code>each\_rule</code> is a helper method that will iterate over all rules.
+
+You can also implement two callbacks, <code>before\_measurement</code> and
+<code>after\_measurement</code> in order to do anything you want before and
+after the measurement, such as tracking time. These are optional.
 
 # Contributing
 
