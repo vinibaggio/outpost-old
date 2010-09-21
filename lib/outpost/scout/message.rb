@@ -5,5 +5,6 @@ module Scout
     def initialize(scout_name, status, message)
       @scout_name, @status, @message = scout_name, status, message
     end
+
   end
 end

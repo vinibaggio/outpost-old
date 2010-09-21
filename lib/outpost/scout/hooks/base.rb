@@ -1,5 +1,3 @@
-require 'outpost/scout/consolidation'
-
 module Scout::Hooks
   class Base
     include Scout::Consolidation

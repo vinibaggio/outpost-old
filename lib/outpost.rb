@@ -7,6 +7,7 @@ class Outpost
   @@reports = {}
 
   class << self
+
     attr_accessor :reports
 
     def depends(dependencies, &block)

@@ -1,5 +1,3 @@
-require 'outpost/scout/hooks/base'
-
 module Scout::Hooks
   class ResponseCode < Base
 

@@ -1,6 +1,3 @@
-require 'outpost/scout/consolidation'
-require 'outpost/scout/message'
-
 module Scout
   class Base
     include Scout::Consolidation
