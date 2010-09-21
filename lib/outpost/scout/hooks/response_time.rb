@@ -1,5 +1,6 @@
 module Scout::Hooks
   class ResponseTime < Base
+
     def before_measurement
       @start_time = Time.now
     end
@@ -19,6 +20,7 @@ module Scout::Hooks
     end
 
     protected
+
       def test_time_intervals(rule, time)
         case rule
         when :less_than
