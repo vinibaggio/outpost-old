@@ -2,7 +2,7 @@ module Scout
   class Base
     include Scout::Consolidation
 
-    attr_accessor :message
+    attr_accessor :message, :status, :force_status
 
     def self.add_hook(klass)
       @@hooks ||= []
@@ -32,7 +32,6 @@ module Scout
 
       @status = consolidate(all_reports)
     end
-
 
     def message
       Message.new(self.class.name, @status, @message)
