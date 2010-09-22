@@ -1,32 +1,24 @@
 module Scout
   class Base
     include Scout::Consolidation
-
+    @@hooks = []
     attr_accessor :message, :status, :force_status
 
     def self.add_hook(klass)
-      @@hooks ||= []
       @@hooks << klass
     end
 
     def measure!
-      @hooks = @@hooks.map(&:new)
-
-      @hooks.each do |hook|
-        hook.before_measurement if hook.respond_to? :before_measurement
-      end
-
+      @hooks = @@hooks.collect { |hook| hook.new }
+      run_before_hooks!
       @response = execute
-
-      @hooks.each do |hook|
-        hook.after_measurement(@response) if hook.respond_to? :after_measurement
-      end
+      run_after_hooks!
     end
 
     def build_report(rules)
       return @force_status if @force_status
 
-      all_reports = @hooks.map do |hook|
+      all_reports = @hooks.collect do |hook|
         hook.build_report(@response, rules)
       end.flatten.compact
 
@@ -39,6 +31,18 @@ module Scout
 
     def down!
       @status = @force_status = :down
+    end
+
+    def run_before_hooks!
+      @hooks.each do |hook|
+        hook.before_measurement if hook.respond_to? :before_measurement
+      end
+    end
+    
+    def run_after_hooks!
+      @hooks.each do |hook|
+        hook.after_measurement(@response) if hook.respond_to? :after_measurement
+      end
     end
 
   end

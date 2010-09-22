@@ -5,6 +5,7 @@ class Outpost
 
   @@scouts = []
   @@reports = {}
+  @@server_settings = {}
 
   class << self
 
@@ -20,8 +21,8 @@ class Outpost
 
     def report(status, rules)
       @reports ||= {}
-      @reports[rules.keys.first] = rules.values.inject({}) do |result, val|
-        result[val] = status
+      @reports[rules.keys.first] = rules.values.inject({}) do |result, value|
+        result[value] = status
         result
       end
     end
@@ -29,6 +30,15 @@ class Outpost
     def options(options={})
       @@options = options
     end
+    
+    def server(server_options={})
+      @@server_settings = { :host => server_options[:host], :user => server_options[:user], :port => server_options[:port] }.reject { |k,v| v.nil? }
+    end
+    
+    def server_settings
+      @@server_settings
+    end
+    
   end
 
   def check!
@@ -42,7 +52,7 @@ class Outpost
   end
 
   def messages
-    @scouts.map(&:message)
+    @scouts.collect { |scout| scout.message }
   end
 
   private
@@ -52,4 +62,5 @@ class Outpost
       scout.build_report(self.class.reports.dup)
     end
   end
+
 end
