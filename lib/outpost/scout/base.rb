@@ -2,7 +2,10 @@ require 'outpost/scout/consolidation'
 require 'outpost/scout/message'
 
 module Scout
+  class NoHooksError < StandardError; end
+
   class Base
+
     include Scout::Consolidation
 
     attr_accessor :message
@@ -13,6 +16,8 @@ module Scout
     end
 
     def measure!
+      raise NoHooksError if @hooks.nil?
+
       @hooks = @@hooks.map(&:new)
 
       @hooks.each do |hook|
