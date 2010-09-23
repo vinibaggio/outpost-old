@@ -1,4 +1,8 @@
+require 'rubygems'
+require 'bundler/setup'
+
 require 'outpost/scout'
+
 
 class Outpost
   include Scout::Consolidation
