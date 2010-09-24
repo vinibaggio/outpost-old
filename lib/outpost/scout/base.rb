@@ -1,5 +1,8 @@
 module Scout
+  class NoHooksError < StandardError; end
+
   class Base
+
     include Scout::Consolidation
     @@hooks = []
     attr_accessor :message, :status, :force_status
@@ -9,6 +12,7 @@ module Scout
     end
 
     def measure!
+      raise NoHooksError if @hooks.nil?
       @hooks = @@hooks.collect { |hook| hook.new }
       run_before_hooks!
       @response = execute
