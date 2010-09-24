@@ -16,14 +16,14 @@ module Server
     # See http://net-ssh.rubyforge.org/ssh/v2/api/index.html for more details.
     #
     def self.strategies(server, options, &block)
-      auth_methods = [ %w(publickey hostbased), %w(password keyboard-interactive) ]
+      auth_methods = [ %w(publickey hostbased), %w(password keyboard-interactive) ] # Methods to handle authentication (for now I'm only using the first element)
       ssh_options = Net::SSH.configuration_for(server.host, options.fetch(:config, true)).merge(options)
       user = server.user || options[:user]
       host = server.host
       port = server.port
       ssh_options.delete(:user) # Don't need user in this Hash
       ssh_options[:port] = port if port
-      yield host, user, ssh_options.merge(:auth_methods => auth_methods.pop,
+      yield host, user, ssh_options.merge(:auth_methods => auth_methods.shift,
         :password => nil, :config => false)
     end
     
