@@ -6,10 +6,16 @@ describe Outpost do
   end
 
   class OutpostExample < Outpost
-    depends ScoutExample => "web site" do
-      options :host => 'localhost', :port => 3000
-      report :up, :response_code => 200
+    
+    server :host => 'hostname', :user => 'my_user'
+    
+    on :server => 'hostname' do
+      depends ScoutExample => "web site" do
+        options :host => 'localhost', :port => 3000
+        report :up, :response_code => 200
+      end
     end
+    
   end
   
   it "should return the options for the outpost" do
@@ -17,7 +23,6 @@ describe Outpost do
   end
   
   it "should possible to set the server settings" do
-    OutpostExample.server(:host => 'hostname', :user => 'my_user')
     OutpostExample.server_settings.should == { :user => 'my_user', :host => 'hostname'}
   end
   
