@@ -3,6 +3,7 @@ require 'bundler/setup'
 
 require 'outpost/scout'
 require 'outpost/server'
+require 'outpost/ssh'
 
 begin
   require 'net/ssh'
@@ -41,11 +42,6 @@ class Outpost
       @@options = options
     end
 
-    #
-    # load any SSH configuration files that were specified in the SSH options. This
-    # will load from ~/.ssh/config and /etc/ssh_config by default (see Net::SSH
-    # for details). Merge the explicitly given ssh_options over the top of the info
-    # from the config file.
     #
     #
     # Set the server configuration in one string
