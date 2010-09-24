@@ -52,7 +52,7 @@ class Outpost
     #
     #    
     def on(options, &block)
-      @server ||= Server.new(options[:serve])
+      @server ||= Server.new(options[:server])
       # yield
       # PENDING
     end
