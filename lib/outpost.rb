@@ -2,6 +2,7 @@ require 'rubygems'
 require 'bundler/setup'
 
 require 'outpost/scout'
+require 'outpost/server'
 
 begin
   require 'net/ssh'
@@ -15,7 +16,6 @@ class Outpost
 
   @@scouts = []
   @@reports = {}
-  @@server_settings = {}
 
   class << self
 
@@ -47,26 +47,24 @@ class Outpost
     # for details). Merge the explicitly given ssh_options over the top of the info
     # from the config file.
     #
+    #
+    # Set the server configuration in one string
+    # 
+    #   on :server => 'batman@127.0.0.1:3000' do
+    #      ... some code      
+    #   end
+    #
     #    
     def on(options, &block)
-      methods = [ %w(publickey hostbased), %w(password keyboard-interactive) ]
+      @server ||= Server.new(options[:serve])
+      # yield
+      # PENDING
+    end
+    
+    def server
+      @server
+    end
 
-      ssh_options = Net::SSH.configuration_for(@@server_settings[:host])
-      
-      Net::SSH.start(, @@server_settings[:user])
-      Server.apply_to(connection, server)
-      yield
-      
-    end
-    
-    def server(server_options={})
-      @@server_settings = { :host => server_options[:host], :user => server_options[:user], :port => server_options[:port] }.reject { |k,v| v.nil? }
-    end
-    
-    def server_settings
-      @@server_settings
-    end
-    
   end
 
   def check!

@@ -18,16 +18,6 @@ module Scout
       
     end
 
-    describe '#measure!' do
-      
-      it "should call #execute method on Scout" do
-        @base.should_receive(:execute).and_return(0)
-        @base.measure!
-      end
-      
-    end
-
-
     describe '#message' do
       
       it "should return a instance of Message" do
