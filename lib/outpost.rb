@@ -26,11 +26,12 @@ class Outpost
     end
 
     def report(status, rules)
-      @reports ||= {}
-      @reports[rules.keys.first] = rules.values.inject({}) do |result, value|
-        result[value] = status
-        result
+      response_pairs = rules.values.map do |value|
+        [value, status]
       end
+
+      @reports ||= {}
+      @reports[rules.keys.first] = Hash[response_pairs]
     end
 
     def options(options={})
