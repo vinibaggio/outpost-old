@@ -13,6 +13,12 @@ describe Scout::Hooks::ResponseCode do
       it { should == [ :up ] }
     end
 
+    context "rule match when boolean" do
+      let(:response_code) { true }
+      let(:rule_list) { { :response_code => {true => :up} } }
+      it { should == [ :up ] }
+    end
+
     context "rule doesn't match" do
       let(:rule_list) { { :response_code => {404 => :down} } }
       it { should == [ nil ] }
