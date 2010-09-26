@@ -1,16 +1,12 @@
 require 'rubygems'
 require 'bundler/setup'
 
+require 'net/ssh'
+
 require 'outpost/scout'
 require 'outpost/server'
 require 'outpost/ssh'
 
-begin
-  require 'net/ssh'
-rescue LoadError
-  require 'rubygems'
-  require 'net/ssh'  
-end
 
 class Outpost
   include Scout::Consolidation
@@ -45,18 +41,18 @@ class Outpost
     #
     #
     # Set the server configuration in one string
-    # 
+    #
     #   on :server => 'batman@127.0.0.1:3000' do
-    #      ... some code      
+    #      ... some code
     #   end
     #
-    #    
+    #
     def on(options, &block)
       @server ||= Server.new(options[:server])
       # yield
       # PENDING
     end
-    
+
     def server
       @server
     end

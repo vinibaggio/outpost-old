@@ -1,6 +1,6 @@
-require 'outpost/scout/basic_hooks'
-
 require 'net/ping'
+
+require 'outpost/scout/basic_hooks'
 
 class PingScout < Scout::Base
 
