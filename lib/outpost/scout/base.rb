@@ -12,7 +12,7 @@ module Scout
     end
 
     def measure!
-      raise NoHooksError if @hooks.nil?
+      raise NoHooksError if @@hooks.empty?
       @hooks = @@hooks.collect { |hook| hook.new }
       run_before_hooks!
       @response = execute
@@ -42,7 +42,7 @@ module Scout
         hook.before_measurement if hook.respond_to? :before_measurement
       end
     end
-    
+
     def run_after_hooks!
       @hooks.each do |hook|
         hook.after_measurement(@response) if hook.respond_to? :after_measurement
