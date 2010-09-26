@@ -1,5 +1,3 @@
-require 'outpost/scout/basic_hooks'
-
 require 'mysql'
 
 class MysqlScout < Scout::Base

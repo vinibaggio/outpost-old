@@ -1,5 +1,3 @@
-require 'outpost/scout/basic_hooks'
-
 require 'net/http'
 
 class WebScout < Scout::Base

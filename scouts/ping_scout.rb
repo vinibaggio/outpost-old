@@ -1,8 +1,7 @@
 require 'net/ping'
 
-require 'outpost/scout/basic_hooks'
-
 class PingScout < Scout::Base
+  add_hook Scout::Hooks::ResponseCode
 
   def initialize(options = {})
     @host     = options[:host]     || 'localhost'
