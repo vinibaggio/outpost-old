@@ -2,7 +2,6 @@ GEM
   remote: http://rubygems.org/
   specs:
     minitest (1.7.1)
-    net-ping (1.3.6)
     net-ssh (2.0.23)
     rspec (1.3.0)
 
@@ -11,6 +10,5 @@ PLATFORMS
 
 DEPENDENCIES
   minitest
-  net-ping
   net-ssh
   rspec (= 1.3.0)

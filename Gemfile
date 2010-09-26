@@ -3,7 +3,6 @@
 source :gemcutter
 
 gem 'net-ssh', :require => 'net/ssh'
-gem 'net-ping'
 
 group :test do
   gem 'minitest'
